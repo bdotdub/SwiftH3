@@ -3,28 +3,28 @@ import XCTest
 
 final class SwiftH3Tests: XCTestCase {
     func testH3CoordinateToIndex() {
-        let coord = H3Coordinate(lat: 0, lon: 0)
-        XCTAssertEqual(coord.toIndex(resolution: 10), H3Index(623560421467684863))
-        XCTAssertEqual(coord.toIndex(resolution: 5), H3Index(601042424243945471))
+        let coord = H3Coordinate(lat: 40.661, lon: -73.944)
+        XCTAssertEqual(coord.toIndex(resolution: 10), H3Index(623400371267010559))
+        XCTAssertEqual(coord.toIndex(resolution: 5), H3Index(600882373361401855))
     }
 
     func testH3IndexToString() {
-        let index = H3Index(623560421467684863)
-        XCTAssertEqual(index.toString(), "8a754e64992ffff")
+        let index = H3Index(623400371267010559)
+        XCTAssertEqual(index.toString(), "8a6c355b2377fff")
     }
 
     func testH3IndexIsValid() {
-        XCTAssertTrue(H3Index(623560421467684863).isValid())
+        XCTAssertTrue(H3Index(623400371267010559).isValid())
         XCTAssertFalse(H3Index(0).isValid())
     }
 
     func testH3IndexResolution() {
-        XCTAssertEqual(H3Index(623560421467684863).resolution, 10)
+        XCTAssertEqual(H3Index(623400371267010559).resolution, 10)
         XCTAssertEqual(H3Index(0).resolution, 0)
     }
 
     func testH3IndexToCoord() {
-        let coord = H3Index(623560421467684863).toCoordinate()
+        let coord = H3Index(623400371267010559).toCoordinate()
         XCTAssertLessThan(abs(coord.lat), 0.0001)
         XCTAssertLessThan(abs(coord.lon), 0.0001)
     }
