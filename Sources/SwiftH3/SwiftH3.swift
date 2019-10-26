@@ -40,4 +40,10 @@ extension H3Index {
         return h3IsValid(self) == 1
     }
 
+    func toCoordinate() -> H3Coordinate {
+        var coord = GeoCoord()
+        h3ToGeo(self, &coord)
+        return H3Coordinate(lat: coord.lat, lon: coord.lon)
+    }
+
 }
