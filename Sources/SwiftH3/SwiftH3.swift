@@ -26,6 +26,12 @@ typealias H3Index = UInt64
 
 extension H3Index {
 
+    var resolution: Int {
+        get {
+            return Int(h3GetResolution(self))
+        }
+    }
+
     func toString() -> String {
         let cString = strdup("")
         h3ToString(self, cString, 17)
