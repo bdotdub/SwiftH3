@@ -29,10 +29,17 @@ final class SwiftH3Tests: XCTestCase {
         XCTAssertLessThan(abs(coord.lon), 0.0001)
     }
 
+    func testStringToH3Coord() {
+        let coord = "8a2a10766d87fff".toH3Coordinate()
+        XCTAssertLessThan(abs(coord.lat), 0.0001)
+        XCTAssertLessThan(abs(coord.lon), 0.0001)
+    }
+
     static var allTests = [
         ("testH3CoordinateToIndex", testH3CoordinateToIndex),
         ("testH3IndexToString", testH3IndexToString),
         ("testH3IndexIsValid", testH3IndexIsValid),
         ("testH3IndexResolution", testH3IndexResolution),
+        ("testStringToH3Coord", testStringToH3Coord),
     ]
 }

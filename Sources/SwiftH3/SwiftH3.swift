@@ -47,3 +47,11 @@ extension H3Index {
     }
 
 }
+
+extension String {
+    func toH3Coordinate() -> H3Coordinate {
+        let str = strdup("")
+        let index = stringToH3(str)
+        return index.toCoordinate()
+    }
+}
