@@ -7,17 +7,15 @@ import Foundation
 
 struct H3Coordinate {
 
-    private var internalCoordinate: GeoCoord
+    let lat: Double
+    let lon: Double
 
-    init(lat: Double, lon: Double) {
-        internalCoordinate = GeoCoord(lat: lat, lon: lon)
-    }
 }
 
 extension H3Coordinate {
 
     func toIndex(resolution: Int) -> H3Index {
-        var coord = internalCoordinate
+        var coord = GeoCoord(lat: lat, lon: lon)
         return H3Index(geoToH3(&coord, Int32(resolution)))
     }
 }
