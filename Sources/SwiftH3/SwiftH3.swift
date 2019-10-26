@@ -15,7 +15,7 @@ struct H3Coordinate {
 extension H3Coordinate {
 
     func toIndex(resolution: Int) -> H3Index {
-        var coord = GeoCoord(lat: lat, lon: lon)
+        var coord = GeoCoord(lat: degsToRads(lat), lon: degsToRads(lon))
         return H3Index(geoToH3(&coord, Int32(resolution)))
     }
 }
@@ -43,7 +43,7 @@ extension H3Index {
     func toCoordinate() -> H3Coordinate {
         var coord = GeoCoord()
         h3ToGeo(self, &coord)
-        return H3Coordinate(lat: coord.lat, lon: coord.lon)
+        return H3Coordinate(lat: radsToDegs(coord.lat), lon: radsToDegs(coord.lon))
     }
 
 }
