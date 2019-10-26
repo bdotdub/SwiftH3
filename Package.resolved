@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Ch3",
+        "repositoryURL": "/Users/benny/Development/swift/Ch3",
+        "state": {
+          "branch": null,
+          "revision": "d3304a500b011ffc4ef61e2c5f6d1a39c7cd256d",
+          "version": "0.0.1"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
