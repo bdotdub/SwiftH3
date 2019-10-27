@@ -1,9 +1,4 @@
-#if canImport(Darwin)
-import Darwin
-import Ch3mac
-#endif
-
-import Foundation
+import Ch3
 
 struct H3Coordinate {
 

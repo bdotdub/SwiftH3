@@ -11,12 +11,12 @@ let package = Package(
             targets: ["SwiftH3"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/bdotdub/Ch3.git", from: "0.0.1"),
+        .package(url: "https://github.com/bdotdub/Ch3.git", from: "3.6.0")
     ],
     targets: [
         .target(
             name: "SwiftH3",
-            dependencies: []),
+            dependencies: ["Ch3"]),
         .testTarget(
             name: "SwiftH3Tests",
             dependencies: ["SwiftH3"]),
