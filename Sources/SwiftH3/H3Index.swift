@@ -59,4 +59,4 @@ extension H3Index: CustomStringConvertible {
 
 }
 
-extension H3Index: Equatable {}
+extension H3Index: Equatable, Hashable {}
