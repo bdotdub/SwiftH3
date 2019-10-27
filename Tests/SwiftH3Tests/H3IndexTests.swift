@@ -14,8 +14,8 @@ final class H3IndexTests: XCTestCase {
     }
 
     func testIsValid() {
-        XCTAssertTrue(H3Index(0x8a2a10766d87fff).valid)
-        XCTAssertFalse(H3Index(0).valid)
+        XCTAssertTrue(H3Index(0x8a2a10766d87fff).isValid)
+        XCTAssertFalse(H3Index(0).isValid)
     }
 
     func testH3IndexToString() {
@@ -40,7 +40,7 @@ final class H3IndexTests: XCTestCase {
             0x8a2a10766d87fff, 0x8a2a10766db7fff, 0x8a2a10766d97fff, 0x8a2a10766d9ffff,
             0x8a2a10766d8ffff, 0x8a2a10766daffff, 0x8a2a10766da7fff
         ]
-        let ringIndices = index.kRingIndices(k: 1)
+        let ringIndices = index.kRingIndices(ringK: 1)
         XCTAssertEqual(ringIndices, expectedNeighbors.map { H3Index(UInt64($0)) })
     }
 

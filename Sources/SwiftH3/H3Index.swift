@@ -2,7 +2,7 @@ import Ch3
 
 struct H3Index {
 
-    fileprivate var value: UInt64
+    private var value: UInt64
 
     init(_ value: UInt64) {
         self.value = value
@@ -29,7 +29,7 @@ extension H3Index {
         return Int(h3GetResolution(value))
     }
 
-    var valid: Bool {
+    var isValid: Bool {
         return h3IsValid(value) == 1
     }
 
@@ -59,10 +59,4 @@ extension H3Index: CustomStringConvertible {
 
 }
 
-extension H3Index: Equatable {
-
-    static func == (lhs: H3Index, rhs: H3Index) -> Bool {
-        return lhs.value == rhs.value
-    }
-
-}
+extension H3Index: Equatable {}
