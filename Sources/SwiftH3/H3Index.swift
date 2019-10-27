@@ -2,6 +2,8 @@ import Ch3
 
 public struct H3Index {
 
+    private static let invalidIndex = 0
+
     private var value: UInt64
 
     public init(_ value: UInt64) {
@@ -23,6 +25,8 @@ public struct H3Index {
 
 }
 
+// MARK: Properties
+
 extension H3Index {
 
     public var resolution: Int {
@@ -39,12 +43,55 @@ extension H3Index {
         return H3Coordinate(lat: radsToDegs(coord.lat), lon: radsToDegs(coord.lon))
     }
 
+}
+
+// MARK: Traversal
+
+extension H3Index {
+
     public func kRingIndices(ringK: Int32) -> [H3Index] {
         var indices = [UInt64](repeating: 0, count: Int(maxKringSize(ringK)))
         indices.withUnsafeMutableBufferPointer { ptr in
             kRing(value, ringK, ptr.baseAddress)
         }
         return indices.map { H3Index($0) }
+    }
+
+}
+
+// MARK: Hierarchy
+
+extension H3Index {
+
+    public var directParent: H3Index? {
+        return parent(at: resolution - 1)
+    }
+
+    public var directCenterChild: H3Index? {
+        return centerChild(at: resolution + 1)
+    }
+
+    public func parent(at resolution: Int) -> H3Index? {
+        let val = h3ToParent(value, Int32(resolution))
+        return val == H3Index.invalidIndex ? nil : H3Index(val)
+    }
+
+    public func children(at resolution: Int) -> [H3Index] {
+        var children = [UInt64](
+            repeating: 0,
+            count: Int(maxH3ToChildrenSize(value, Int32(resolution)))
+        )
+        children.withUnsafeMutableBufferPointer { ptr in
+            h3ToChildren(value, Int32(resolution), ptr.baseAddress)
+        }
+        return children
+            .filter { $0 != 0 }
+            .map { H3Index($0) }
+    }
+
+    public func centerChild(at resolution: Int) -> H3Index? {
+        let index = h3ToCenterChild(value, Int32(resolution))
+        return index == H3Index.invalidIndex ? nil : H3Index(index)
     }
 
 }
