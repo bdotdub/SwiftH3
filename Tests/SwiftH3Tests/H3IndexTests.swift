@@ -7,6 +7,12 @@ final class H3IndexTests: XCTestCase {
         XCTAssertEqual(coord, H3Index(0x8a2a10766d87fff))
     }
 
+    func testCoordToH3Index() {
+        let coord = H3Coordinate(lat: 40.661, lon: -73.944)
+        XCTAssertEqual(H3Index(coordinate: coord, resolution: 10), H3Index(0x8a2a10766d87fff))
+        XCTAssertEqual(H3Index(coordinate: coord, resolution: 5), H3Index(0x852a1077fffffff))
+    }
+
     func testIsValid() {
         XCTAssertTrue(H3Index(0x8a2a10766d87fff).valid)
         XCTAssertFalse(H3Index(0).valid)
@@ -30,6 +36,7 @@ final class H3IndexTests: XCTestCase {
 
     static var allTests = [
         ("testStringToH3Index", testStringToH3Index),
+        ("testCoordToH3Index", testCoordToH3Index),
         ("testIsValid", testIsValid),
         ("testResolution", testResolution),
         ("testToCoord", testToCoord),

@@ -8,6 +8,11 @@ struct H3Index {
         self.value = value
     }
 
+    init(coordinate: H3Coordinate, resolution: Int32) {
+        var coord = GeoCoord(lat: degsToRads(coordinate.lat), lon: degsToRads(coordinate.lon))
+        self.value = geoToH3(&coord, Int32(resolution))
+    }
+
     init(string: String) {
         var value: UInt64 = 0
         string.withCString { ptr in
