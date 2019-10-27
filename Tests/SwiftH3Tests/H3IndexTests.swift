@@ -3,13 +3,13 @@ import XCTest
 
 final class H3IndexTests: XCTestCase {
     func testIsValid() {
-        XCTAssertTrue(H3Index(0x8a2a10766d87fff).isValid())
-        XCTAssertFalse(H3Index(0).isValid())
+        XCTAssertTrue(H3Index(0x8a2a10766d87fff).valid)
+        XCTAssertFalse(H3Index(0).valid)
     }
 
     func testH3IndexToString() {
         let index = H3Index(0x8a2a10766d87fff)
-        XCTAssertEqual(index.toString(), "8a2a10766d87fff")
+        XCTAssertEqual(index.description, "8a2a10766d87fff")
     }
 
     func testResolution() {
@@ -18,7 +18,7 @@ final class H3IndexTests: XCTestCase {
     }
 
     func testToCoord() {
-        let coord = H3Index(0x8a2a10766d87fff).toCoordinate()
+        let coord = H3Index(0x8a2a10766d87fff).coordinate
         XCTAssertLessThan(abs(coord.lat - 40.66121200787385), 0.0001)
         XCTAssertLessThan(abs(coord.lon + 73.94380522623717), 0.0001)
     }
