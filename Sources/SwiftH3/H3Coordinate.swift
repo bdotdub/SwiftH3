@@ -1,8 +1,13 @@
 import Ch3
 
-struct H3Coordinate {
+public struct H3Coordinate {
 
-    let lat: Double
-    let lon: Double
+    public let lat: Double
+    public let lon: Double
+
+    public init(lat: Double, lon: Double) {
+        self.lat = lat
+        self.lon = lon
+    }
 
 }
