@@ -34,6 +34,16 @@ final class H3IndexTests: XCTestCase {
         XCTAssertLessThan(abs(coord.lon + 73.94380522623717), 0.0001)
     }
 
+    func testKRingIndices() {
+        let index = H3Index(0x8a2a10766d87fff)
+        let expectedNeighbors = [
+            0x8a2a10766d87fff, 0x8a2a10766db7fff, 0x8a2a10766d97fff, 0x8a2a10766d9ffff,
+            0x8a2a10766d8ffff, 0x8a2a10766daffff, 0x8a2a10766da7fff
+        ]
+        let ringIndices = index.kRingIndices(k: 1)
+        XCTAssertEqual(ringIndices, expectedNeighbors.map { H3Index(UInt64($0)) })
+    }
+
     static var allTests = [
         ("testStringToH3Index", testStringToH3Index),
         ("testCoordToH3Index", testCoordToH3Index),

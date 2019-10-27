@@ -39,6 +39,14 @@ extension H3Index {
         return H3Coordinate(lat: radsToDegs(coord.lat), lon: radsToDegs(coord.lon))
     }
 
+    func kRingIndices(ringK: Int32) -> [H3Index] {
+        var indices = [UInt64](repeating: 0, count: Int(maxKringSize(ringK)))
+        indices.withUnsafeMutableBufferPointer { ptr in
+            kRing(value, ringK, ptr.baseAddress)
+        }
+        return indices.map { H3Index($0) }
+    }
+
 }
 
 extension H3Index: CustomStringConvertible {
