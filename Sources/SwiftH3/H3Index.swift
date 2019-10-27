@@ -1,20 +1,5 @@
 import Ch3
 
-struct H3Coordinate {
-
-    let lat: Double
-    let lon: Double
-
-}
-
-extension H3Coordinate {
-
-    func toIndex(resolution: Int) -> H3Index {
-        var coord = GeoCoord(lat: degsToRads(lat), lon: degsToRads(lon))
-        return H3Index(geoToH3(&coord, Int32(resolution)))
-    }
-}
-
 typealias H3Index = UInt64
 
 extension H3Index {
@@ -37,15 +22,6 @@ extension H3Index {
         var coord = GeoCoord()
         h3ToGeo(self, &coord)
         return H3Coordinate(lat: radsToDegs(coord.lat), lon: radsToDegs(coord.lon))
-    }
-
-}
-
-extension String {
-
-    func toH3Index() -> H3Index {
-        let str = strdup(self)
-        return stringToH3(str)
     }
 
 }
