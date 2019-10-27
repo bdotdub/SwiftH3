@@ -2,6 +2,11 @@ import XCTest
 @testable import SwiftH3
 
 final class H3IndexTests: XCTestCase {
+    func testStringToH3Index() {
+        let coord = H3Index(string: "8a2a10766d87fff")
+        XCTAssertEqual(coord, H3Index(0x8a2a10766d87fff))
+    }
+
     func testIsValid() {
         XCTAssertTrue(H3Index(0x8a2a10766d87fff).valid)
         XCTAssertFalse(H3Index(0).valid)
@@ -24,6 +29,7 @@ final class H3IndexTests: XCTestCase {
     }
 
     static var allTests = [
+        ("testStringToH3Index", testStringToH3Index),
         ("testIsValid", testIsValid),
         ("testResolution", testResolution),
         ("testToCoord", testToCoord),

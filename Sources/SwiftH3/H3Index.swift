@@ -2,9 +2,17 @@ import Ch3
 
 struct H3Index {
 
-    fileprivate let value: UInt64
+    fileprivate var value: UInt64
 
     init(_ value: UInt64) {
+        self.value = value
+    }
+
+    init(string: String) {
+        var value: UInt64 = 0
+        string.withCString { ptr in
+            value = stringToH3(ptr)
+        }
         self.value = value
     }
 
