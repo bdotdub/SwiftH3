@@ -5,7 +5,7 @@ This is a simple library to interface with [H3](https://github.com/uber/h3), a h
 ## Installation
 
 1. Add this to your `Package.swift` (or add via Xcode 11):
-    * `.package(url: "https://github.com/bdotdub/SwiftH3.git", from: "0.1.0")`
+    * `.package(url: "https://github.com/timskap/SwiftH3.git", from: "0.1.0")`
 
 ## Examples
 
