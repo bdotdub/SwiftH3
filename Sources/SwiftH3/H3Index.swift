@@ -1,3 +1,4 @@
+import Foundation
 import Ch3
 
 /// Represents an index in H3
