@@ -1,4 +1,4 @@
-import Foundation
+#include <string.h>
 import Ch3
 
 /// Represents an index in H3
