@@ -1,4 +1,5 @@
 import Ch3
+import Darwin
 
 /// Represents an index in H3
 public struct H3Index {
