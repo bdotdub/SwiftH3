@@ -43,6 +43,18 @@ final class H3IndexTests: XCTestCase {
         XCTAssertLessThan(abs(coord.lon + 73.94380522623717), 0.0001)
     }
 
+    func testVertices() {
+        let vertices = H3Index(0x8a2a10766d87fff).vertices
+        XCTAssertEqual(vertices, [
+            H3Coordinate(lat: 40.66184827439293, lon: -73.94352441519625),
+            H3Coordinate(lat: 40.661698207126484, lon: -73.94443415058286),
+            H3Coordinate(lat: 40.66106193935878, lon: -73.94471494861203),
+            H3Coordinate(lat: 40.66057574562398, lon: -73.94408602973667),
+            H3Coordinate(lat: 40.660725808423436, lon: -73.94317631521777),
+            H3Coordinate(lat: 40.661362069424605, lon: -73.94289549870687)
+        ])
+    }
+
     // MARK: Traversal
 
     func testKRingIndices() {

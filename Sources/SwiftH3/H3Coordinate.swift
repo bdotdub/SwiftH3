@@ -25,3 +25,11 @@ public struct H3Coordinate {
         Ch3.LatLng(lat: degsToRads(lat), lng: degsToRads(lon))
     }
 }
+
+extension H3Coordinate: Equatable {
+    
+    public static func == (lhs: H3Coordinate, rhs: H3Coordinate) -> Bool {
+        lhs.lat == rhs.lat && lhs.lon == rhs.lon
+    }
+
+}

@@ -75,6 +75,22 @@ extension H3Index {
         return H3Coordinate(lat: radsToDegs(coord.lat), lon: radsToDegs(coord.lng))
     }
 
+    /// The vertices of the index
+    public var vertices: [H3Coordinate] {
+        var cellBoundary = Ch3.CellBoundary()
+        let error = cellToBoundary(value, &cellBoundary)
+        if error.code != .success {
+            return []
+        }
+        let vertsArray: [LatLng] = withUnsafePointer(to: cellBoundary.verts) {
+            let ptr = UnsafeRawPointer($0).assumingMemoryBound(to: LatLng.self)
+            return Array(UnsafeBufferPointer(start: ptr, count: Int(cellBoundary.numVerts)))
+        }
+        return vertsArray.map { latLng in
+            H3Coordinate(lat: radsToDegs(latLng.lat), lon: radsToDegs(latLng.lng))
+        }
+    }
+
 }
 
 // MARK: Traversal
