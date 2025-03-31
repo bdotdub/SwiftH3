@@ -206,7 +206,7 @@ public class H3Polygon {
         }
     }
 
-    init(loop: [H3Coordinate]) {
+    public init(loop: [H3Coordinate]) {
         self.loop = loop.map(\.latLng)
     }
 }
