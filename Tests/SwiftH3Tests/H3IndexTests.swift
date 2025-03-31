@@ -121,6 +121,18 @@ final class H3IndexTests: XCTestCase {
         XCTAssertEqual(res15Index!.directCenterChild, nil)
     }
 
+    func testPolygonToCells() {
+        let polygon = H3Polygon(loop: [
+            H3Coordinate(lat: 40.69677766938962, lon: -73.991369519561),
+            H3Coordinate(lat: 40.69677766938962, lon: -73.97952787017276),
+            H3Coordinate(lat: 40.68136589520371, lon: -73.97952787017276),
+            H3Coordinate(lat: 40.68136589520371, lon: -73.991369519561),
+        ])
+
+        let cells = H3Index.polygonToCells(polygon: polygon, resolution: 9)
+        XCTAssertEqual(cells, [0x892a100da4bffff, 0x892a1072d2fffff, 0x892a1072993ffff, 0x892a100da4fffff, 0x892a100da7bffff, 0x892a1072997ffff, 0x892a1072987ffff, 0x892a10729b3ffff, 0x892a100da43ffff, 0x892a1072d27ffff, 0x892a100da5bffff, 0x892a10729b7ffff, 0x892a10729a3ffff].map(H3Index.init))
+    }
+
     static var allTests = [
         ("testStringToH3Index", testStringToH3Index),
         ("testCoordToH3Index", testCoordToH3Index),

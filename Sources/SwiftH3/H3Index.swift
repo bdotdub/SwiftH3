@@ -186,7 +186,64 @@ extension H3Index {
         let index = memory.pointee
         return index == H3Index.invalidIndex ? nil : H3Index(index)
     }
+}
 
+public class H3Polygon {
+    private var loop: [Ch3.LatLng]
+    // TODO: Add holes
+
+    var geoPolygon: GeoPolygon {
+        let numVerts = Int32(loop.count)
+        return loop.withUnsafeMutableBufferPointer { ptr in
+            GeoPolygon(
+                geoloop: GeoLoop(
+                    numVerts: numVerts,
+                    verts: ptr.baseAddress
+                ),
+                numHoles: 0,
+                holes: nil
+            )
+        }
+    }
+
+    init(loop: [H3Coordinate]) {
+        self.loop = loop.map(\.latLng)
+    }
+}
+
+extension Array where Element == H3Coordinate {
+
+    var geoLoop: GeoLoop {
+        var verts = map(\.latLng)
+        return verts.withUnsafeMutableBufferPointer { ptr in
+            return GeoLoop(
+                numVerts: Int32(count),
+                verts: ptr.baseAddress
+            )
+        }
+
+    }
+}
+
+extension H3Index {
+
+    public static func polygonToCells(polygon: H3Polygon, resolution: Int) -> [H3Index] {
+        var geoPolygon = polygon.geoPolygon
+
+        var maxCellsSize: Int64 = 0
+        let sizeError = maxPolygonToCellsSize(&geoPolygon, Int32(resolution), 0, &maxCellsSize)
+        if sizeError.code != .success {
+            return []
+        }
+
+        var cells = [UInt64](repeating: 0, count: Int(maxCellsSize))
+        let error = Ch3.polygonToCells(&geoPolygon, Int32(resolution), 0, &cells)
+        if error.code != .success {
+            return []
+        }
+
+        return cells.map(H3Index.init).filter(\.isValid)
+    }
 }
 
 extension H3Index: CustomStringConvertible {
