@@ -21,4 +21,7 @@ public struct H3Coordinate {
         self.lon = lon
     }
 
+    public var latLng: LatLng {
+        Ch3.LatLng(lat: degsToRads(lat), lng: degsToRads(lon))
+    }
 }

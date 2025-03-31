@@ -35,6 +35,10 @@ final class H3IndexTests: XCTestCase {
 
     func testToCoord() {
         let coord = H3Index(0x8a2a10766d87fff).coordinate
+        guard let coord else {
+            XCTFail("Failed to convert H3Index to coordinate.")
+            return
+        }
         XCTAssertLessThan(abs(coord.lat - 40.66121200787385), 0.0001)
         XCTAssertLessThan(abs(coord.lon + 73.94380522623717), 0.0001)
     }
@@ -47,7 +51,11 @@ final class H3IndexTests: XCTestCase {
             0x8a2a10766d87fff, 0x8a2a10766db7fff, 0x8a2a10766d97fff, 0x8a2a10766d9ffff,
             0x8a2a10766d8ffff, 0x8a2a10766daffff, 0x8a2a10766da7fff
         ]
-        let ringIndices = index.kRingIndices(ringK: 1)
+        let ringIndices = try? index.kRingIndices(ringK: 1)
+        guard let ringIndices else {
+            XCTFail("Failed to compute K-ring indices.")
+            return
+        }
         XCTAssertEqual(ringIndices, expectedNeighbors.map { H3Index(UInt64($0)) })
     }
 

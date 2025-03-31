@@ -1,16 +1,13 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "Ch3",
-        "repositoryURL": "https://github.com/bdotdub/Ch3.git",
-        "state": {
-          "branch": null,
-          "revision": "c9bb49bc6801e745f0c7ac135855cda09dbb4536",
-          "version": "3.6.0"
-        }
+  "pins" : [
+    {
+      "identity" : "ch3",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/bdotdub/Ch3.git",
+      "state" : {
+        "revision" : "66333b035dcc936db729ba07684189db189bf893"
       }
-    ]
-  },
-  "version": 1
+    }
+  ],
+  "version" : 2
 }
