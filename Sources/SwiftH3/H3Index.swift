@@ -8,6 +8,8 @@ public struct H3Index {
 
     private var value: UInt64
 
+    // MARK: - Initializers
+
     /**
      Initializes using a 64-bit integer
 
@@ -36,13 +38,64 @@ public struct H3Index {
      - Parameter string: The string representing the hex value of the int
      */
     public init(string: String) {
-        var value: UInt64 = 0
-        string.withCString { ptr in
-            value = stringToH3(ptr)
+        let value = string.withCString { cString in
+            stringToH3(cString)
+        }
+        guard value != 0 else {
+            fatalError("Invalid H3 index string: \(string)")
         }
         self.value = value
     }
 
+}
+extension H3Index {
+    
+    /// Returns the cell boundary in spherical coordinates for an H3 index.
+    ///
+    /// - Returns: The boundary of the H3 cell in spherical coordinates.
+    public func boundary() -> [H3Coordinate] {
+        var gb = GeoBoundary()
+        h3ToGeoBoundary(value, &gb)
+        
+        var coordinates: [H3Coordinate] = []
+        
+        switch gb.numVerts {
+        case 10:
+            coordinates.append(H3Coordinate(lat: radsToDegs(gb.verts.9.lat), lon: radsToDegs(gb.verts.9.lon)))
+            fallthrough
+        case 9:
+            coordinates.append(H3Coordinate(lat: radsToDegs(gb.verts.8.lat), lon: radsToDegs(gb.verts.8.lon)))
+            fallthrough
+        case 8:
+            coordinates.append(H3Coordinate(lat: radsToDegs(gb.verts.7.lat), lon: radsToDegs(gb.verts.7.lon)))
+            fallthrough
+        case 7:
+            coordinates.append(H3Coordinate(lat: radsToDegs(gb.verts.6.lat), lon: radsToDegs(gb.verts.6.lon)))
+            fallthrough
+        case 6:
+            coordinates.append(H3Coordinate(lat: radsToDegs(gb.verts.5.lat), lon: radsToDegs(gb.verts.5.lon)))
+            fallthrough
+        case 5:
+            coordinates.append(H3Coordinate(lat: radsToDegs(gb.verts.4.lat), lon: radsToDegs(gb.verts.4.lon)))
+            fallthrough
+        case 4:
+            coordinates.append(H3Coordinate(lat: radsToDegs(gb.verts.3.lat), lon: radsToDegs(gb.verts.3.lon)))
+            fallthrough
+        case 3:
+            coordinates.append(H3Coordinate(lat: radsToDegs(gb.verts.2.lat), lon: radsToDegs(gb.verts.2.lon)))
+            fallthrough
+        case 2:
+            coordinates.append(H3Coordinate(lat: radsToDegs(gb.verts.1.lat), lon: radsToDegs(gb.verts.1.lon)))
+            fallthrough
+        case 1:
+            coordinates.append(H3Coordinate(lat: radsToDegs(gb.verts.0.lat), lon: radsToDegs(gb.verts.0.lon)))
+        default:
+            break
+        }
+        
+        return coordinates
+    }
+    
 }
 
 // MARK: Properties
@@ -81,10 +134,8 @@ extension H3Index {
      */
     public func kRingIndices(ringK: Int32) -> [H3Index] {
         var indices = [UInt64](repeating: 0, count: Int(maxKringSize(ringK)))
-        indices.withUnsafeMutableBufferPointer { ptr in
-            kRing(value, ringK, ptr.baseAddress)
-        }
-        return indices.map { H3Index($0) }
+        kRing(value, ringK, &indices)
+        return indices.compactMap { $0 == 0 ? nil : H3Index($0) }
     }
 
 }
@@ -150,9 +201,11 @@ extension H3Index: CustomStringConvertible {
 
     /// String description of the index
     public var description: String {
-        let cString = strdup("")
-        h3ToString(value, cString, 17)
-        return String(cString: cString!)
+        var buffer = [CChar](repeating: 0, count: 17)
+        buffer.withUnsafeMutableBufferPointer { ptr in
+            h3ToString(value, ptr.baseAddress, 17)
+        }
+        return String(cString: buffer)
     }
 
 }
