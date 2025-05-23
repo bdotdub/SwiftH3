@@ -200,9 +200,11 @@ extension H3Index: CustomStringConvertible {
 
     /// String description of the index
     public var description: String {
-        let cString = strdup("")
-        h3ToString(value, cString, 17)
-        return String(cString: cString!)
+        var buffer = [CChar](repeating: 0, count: 17)
+        buffer.withUnsafeMutableBufferPointer { ptr in
+            h3ToString(value, ptr.baseAddress, 17)
+        }
+        return String(cString: buffer)
     }
 
 }
