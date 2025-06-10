@@ -25,8 +25,8 @@ public struct H3Index {
         - resolution: The resolution
     */
     public init(coordinate: H3Coordinate, resolution: Int32) {
-        var coord = GeoCoord(lat: degsToRads(coordinate.lat), lon: degsToRads(coordinate.lon))
-        self.value = geoToH3(&coord, Int32(resolution))
+        var coord = LatLng(lat: degsToRads(coordinate.lat), lon: degsToRads(coordinate.lon))
+        self.value = latLngToCell(&coord, Int32(resolution))
     }
 
     /**
@@ -38,7 +38,7 @@ public struct H3Index {
     public init(string: String) {
         var value: UInt64 = 0
         string.withCString { ptr in
-            value = stringToH3(ptr)
+            value = stringToCell(ptr)
         }
         self.value = value
     }
@@ -51,18 +51,18 @@ extension H3Index {
 
     /// The resolution of the index
     public var resolution: Int {
-        return Int(h3GetResolution(value))
+        return Int(cellToResolution(value))
     }
 
     /// Indicates whether this is a valid H3 index
     public var isValid: Bool {
-        return h3IsValid(value) == 1
+        return isValidCell(value) == 1
     }
 
     /// The coordinate that this index represents
     public var coordinate: H3Coordinate {
-        var coord = GeoCoord()
-        h3ToGeo(value, &coord)
+        var coord = LatLng()
+        cellToLatLng(value, &coord)
         return H3Coordinate(lat: radsToDegs(coord.lat), lon: radsToDegs(coord.lon))
     }
 
@@ -80,9 +80,9 @@ extension H3Index {
      - Returns: A list of indices. Can be empty.
      */
     public func kRingIndices(ringK: Int32) -> [H3Index] {
-        var indices = [UInt64](repeating: 0, count: Int(maxKringSize(ringK)))
+        var indices = [UInt64](repeating: 0, count: Int(maxGridDiskSize(ringK)))
         indices.withUnsafeMutableBufferPointer { ptr in
-            kRing(value, ringK, ptr.baseAddress)
+            gridDisk(value, ringK, ptr.baseAddress)
         }
         return indices.map { H3Index($0) }
     }
@@ -111,7 +111,7 @@ extension H3Index {
     /// - Returns: The parent index at that resolution.
     ///            Can be nil if invalid
     public func parent(at resolution: Int) -> H3Index? {
-        let val = h3ToParent(value, Int32(resolution))
+        let val = cellToParent(value, Int32(resolution))
         return val == H3Index.invalidIndex ? nil : H3Index(val)
     }
 
@@ -123,10 +123,10 @@ extension H3Index {
     public func children(at resolution: Int) -> [H3Index] {
         var children = [UInt64](
             repeating: 0,
-            count: Int(maxH3ToChildrenSize(value, Int32(resolution)))
+            count: Int(maxCellToChildrenSize(value, Int32(resolution)))
         )
         children.withUnsafeMutableBufferPointer { ptr in
-            h3ToChildren(value, Int32(resolution), ptr.baseAddress)
+            cellToChildren(value, Int32(resolution), ptr.baseAddress)
         }
         return children
             .filter { $0 != 0 }
@@ -140,7 +140,7 @@ extension H3Index {
     /// - Returns: The center child index at that resolution.
     ///            Can be nil if invalid
     public func centerChild(at resolution: Int) -> H3Index? {
-        let index = h3ToCenterChild(value, Int32(resolution))
+        let index = cellToCenterChild(value, Int32(resolution))
         return index == H3Index.invalidIndex ? nil : H3Index(index)
     }
 
@@ -151,7 +151,7 @@ extension H3Index: CustomStringConvertible {
     /// String description of the index
     public var description: String {
         let cString = strdup("")
-        h3ToString(value, cString, 17)
+        cellToString(value, cString, 17)
         return String(cString: cString!)
     }
 

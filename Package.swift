@@ -1,4 +1,4 @@
-// swift-tools-version:5.0
+// swift-tools-version:5.5
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -11,7 +11,7 @@ let package = Package(
             targets: ["SwiftH3"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/bdotdub/Ch3.git", from: "3.6.0")
+        .package(url: "https://github.com/bdotdub/Ch3.git", branch: "v4.2.1")
     ],
     targets: [
         .target(
