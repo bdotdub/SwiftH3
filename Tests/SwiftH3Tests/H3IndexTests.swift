@@ -117,7 +117,14 @@ final class H3IndexTests: XCTestCase {
         ("testStringToH3Index", testStringToH3Index),
         ("testCoordToH3Index", testCoordToH3Index),
         ("testIsValid", testIsValid),
+        ("testH3IndexToString", testH3IndexToString),
         ("testResolution", testResolution),
         ("testToCoord", testToCoord),
+        ("testKRingIndices", testKRingIndices),
+        ("testParent", testParent),
+        ("testDirectParent", testDirectParent),
+        ("testChildren", testChildren),
+        ("testCenterChild", testCenterChild),
+        ("testDirectCenterChild", testDirectCenterChild),
     ]
 }

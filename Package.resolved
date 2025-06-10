@@ -5,9 +5,9 @@
         "package": "Ch3",
         "repositoryURL": "https://github.com/bdotdub/Ch3.git",
         "state": {
-          "branch": null,
-          "revision": "c9bb49bc6801e745f0c7ac135855cda09dbb4536",
-          "version": "3.6.0"
+          "branch": "v4.2.1",
+          "revision": "0000000000000000000000000000000000000000",
+          "version": null
         }
       }
     ]
