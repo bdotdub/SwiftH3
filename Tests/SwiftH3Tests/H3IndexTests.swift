@@ -142,7 +142,21 @@ final class H3IndexTests: XCTestCase {
         ])
 
         let cells = H3Index.polygonToCells(polygon: polygon, resolution: 9)
-        XCTAssertEqual(cells, [0x892a100da4bffff, 0x892a1072d2fffff, 0x892a1072993ffff, 0x892a100da4fffff, 0x892a100da7bffff, 0x892a1072997ffff, 0x892a1072987ffff, 0x892a10729b3ffff, 0x892a100da43ffff, 0x892a1072d27ffff, 0x892a100da5bffff, 0x892a10729b7ffff, 0x892a10729a3ffff].map(H3Index.init))
+        XCTAssertEqual(cells, [
+            0x892a100da4bffff,
+            0x892a1072d2fffff,
+            0x892a1072993ffff,
+            0x892a100da4fffff,
+            0x892a100da7bffff,
+            0x892a1072997ffff,
+            0x892a1072987ffff,
+            0x892a10729b3ffff,
+            0x892a100da43ffff,
+            0x892a1072d27ffff,
+            0x892a100da5bffff,
+            0x892a10729b7ffff,
+            0x892a10729a3ffff
+        ].map(H3Index.init))
     }
 
     static var allTests = [
