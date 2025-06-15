@@ -150,9 +150,10 @@ extension H3Index: CustomStringConvertible {
 
     /// String description of the index
     public var description: String {
-        let cString = strdup("")
+        let cString = UnsafeMutablePointer<CChar>.allocate(capacity: 17)
+        defer { cString.deallocate() }
         h3ToString(value, cString, 17)
-        return String(cString: cString!)
+        return String(cString: cString)
     }
 
 }
