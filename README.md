@@ -9,7 +9,13 @@ This is a simple library to interface with [H3](https://github.com/uber/h3), a h
 
 ## Examples
 
-TBD
+```swift
+import SwiftH3
+
+let coordinate = H3Coordinate(lat: 37.775, lon: -122.419)
+let index = H3Index(coordinate: coordinate, resolution: 9)
+print(index)
+```
 
 ## Thanks
 
