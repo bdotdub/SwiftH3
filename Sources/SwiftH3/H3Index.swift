@@ -208,14 +208,15 @@ public class H3Polygon {
         return loop.withUnsafeMutableBufferPointer { loopPtr in
             var holeLoops: [GeoLoop] = []
             holeLoops.reserveCapacity(holes.count)
-            for hole in holes {
+            for var hole in holes {
                 let loop = hole.withUnsafeMutableBufferPointer { ptr in
                     GeoLoop(numVerts: Int32(ptr.count), verts: ptr.baseAddress)
                 }
                 holeLoops.append(loop)
             }
 
-            return holeLoops.withUnsafeMutableBufferPointer { holesPtr in
+            var holeLoopsCopy = holeLoops
+            return holeLoopsCopy.withUnsafeMutableBufferPointer { holesPtr in
                 var polygon = GeoPolygon(
                     geoloop: GeoLoop(
                         numVerts: Int32(loopPtr.count),
