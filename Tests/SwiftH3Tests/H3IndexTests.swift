@@ -91,7 +91,7 @@ final class H3IndexTests: XCTestCase {
 
     func testChildren() {
         let index = H3Index(0x8a2a10766d87fff)
-        XCTAssertEqual(try index.children(at: 9), [])
+        XCTAssertThrowsError(try index.children(at: 9), "Resolution is lower than index resolution")
 
         let expectedRes11 = [
             0x8b2a10766d80fff, 0x8b2a10766d81fff, 0x8b2a10766d82fff, 0x8b2a10766d83fff,
