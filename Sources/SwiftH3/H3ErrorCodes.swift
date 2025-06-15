@@ -26,6 +26,8 @@ enum H3ErrorCodes: UInt32 {
     case optionInvalid = 15 // Mode or flags argument was not valid.
 }
 
+extension H3ErrorCodes: Error {}
+
 extension Ch3.H3Error {
     var code: H3ErrorCodes {
         H3ErrorCodes(rawValue: self) ?? .success

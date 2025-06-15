@@ -108,8 +108,7 @@ extension H3Index {
         var maxSize: Int64 = 0
         let maxGridError = maxGridDiskSize(Int32(ringK), &maxSize)
         if maxGridError.code != .success {
-            // TODO: throw
-            return []
+            throw maxGridError.code
         }
 
         var indices = [UInt64](repeating: 0, count: Int(maxSize))
