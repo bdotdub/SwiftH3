@@ -91,13 +91,13 @@ final class H3IndexTests: XCTestCase {
 
     func testChildren() {
         let index = H3Index(0x8a2a10766d87fff)
-        XCTAssertEqual(index.children(at: 9), [])
+        XCTAssertThrowsError(try index.children(at: 9), "Resolution is lower than index resolution")
 
         let expectedRes11 = [
             0x8b2a10766d80fff, 0x8b2a10766d81fff, 0x8b2a10766d82fff, 0x8b2a10766d83fff,
             0x8b2a10766d84fff, 0x8b2a10766d85fff, 0x8b2a10766d86fff
         ].map { H3Index($0) }
-        XCTAssertEqual(index.children(at: 11), expectedRes11)
+        XCTAssertEqual(try index.children(at: 11), expectedRes11)
 
         let expectedRes12 = [
             0x8c2a10766d801ff, 0x8c2a10766d803ff, 0x8c2a10766d805ff, 0x8c2a10766d807ff,
@@ -114,7 +114,7 @@ final class H3IndexTests: XCTestCase {
             0x8c2a10766d865ff, 0x8c2a10766d867ff, 0x8c2a10766d869ff, 0x8c2a10766d86bff,
             0x8c2a10766d86dff
         ].map { H3Index($0) }
-        XCTAssertEqual(index.children(at: 12), expectedRes12)
+        XCTAssertEqual(try index.children(at: 12), expectedRes12)
     }
 
     func testCenterChild() {
@@ -142,7 +142,21 @@ final class H3IndexTests: XCTestCase {
         ])
 
         let cells = H3Index.polygonToCells(polygon: polygon, resolution: 9)
-        XCTAssertEqual(cells, [0x892a100da4bffff, 0x892a1072d2fffff, 0x892a1072993ffff, 0x892a100da4fffff, 0x892a100da7bffff, 0x892a1072997ffff, 0x892a1072987ffff, 0x892a10729b3ffff, 0x892a100da43ffff, 0x892a1072d27ffff, 0x892a100da5bffff, 0x892a10729b7ffff, 0x892a10729a3ffff].map(H3Index.init))
+        XCTAssertEqual(cells, [
+            0x892a100da4bffff,
+            0x892a1072d2fffff,
+            0x892a1072993ffff,
+            0x892a100da4fffff,
+            0x892a100da7bffff,
+            0x892a1072997ffff,
+            0x892a1072987ffff,
+            0x892a10729b3ffff,
+            0x892a100da43ffff,
+            0x892a1072d27ffff,
+            0x892a100da5bffff,
+            0x892a10729b7ffff,
+            0x892a10729a3ffff
+        ].map(H3Index.init))
     }
 
     static var allTests = [

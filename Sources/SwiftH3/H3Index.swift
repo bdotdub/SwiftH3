@@ -117,8 +117,7 @@ extension H3Index {
             gridDiskError = gridDisk(value, ringK, ptr.baseAddress)
         }
         if gridDiskError.code != .success {
-            // TODO: throw
-            return []
+            throw gridDiskError.code
         }
 
         return indices.map { H3Index($0) }
@@ -161,12 +160,11 @@ extension H3Index {
     /// - Parameter resolution: The resolution for the parent
     /// - Returns: The parent index at that resolution.
     ///            Can be nil if invalid
-    public func children(at resolution: Int) -> [H3Index] {
+    public func children(at resolution: Int) throws -> [H3Index] {
         var maxChildren: Int64 = 0
         let maxChildrenError = cellToChildrenSize(value, Int32(resolution), &maxChildren)
         if maxChildrenError.code != .success {
-            // TODO: Throw
-            return []
+            throw maxChildrenError.code
         }
 
         var error: H3Error
@@ -176,8 +174,7 @@ extension H3Index {
         )
         error = cellToChildren(value, Int32(resolution), &children)
         if error.code != .success {
-            // TODO: throw
-            return []
+            throw error.code
         }
 
         return children

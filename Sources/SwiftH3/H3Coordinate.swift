@@ -27,7 +27,7 @@ public struct H3Coordinate {
 }
 
 extension H3Coordinate: Equatable {
-    
+
     public static func == (lhs: H3Coordinate, rhs: H3Coordinate) -> Bool {
         lhs.lat == rhs.lat && lhs.lon == rhs.lon
     }
