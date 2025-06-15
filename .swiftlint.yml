@@ -2,3 +2,5 @@ disabled_rules:
   - trailing_comma
 excluded:
   - .build
+  - .git
+  - .swiftpm
