@@ -202,24 +202,37 @@ extension H3Index {
 
 public class H3Polygon {
     private var loop: [Ch3.LatLng]
-    // TODO: Add holes
+    private var holes: [[Ch3.LatLng]]
 
-    var geoPolygon: GeoPolygon {
-        let numVerts = Int32(loop.count)
-        return loop.withUnsafeMutableBufferPointer { ptr in
-            GeoPolygon(
-                geoloop: GeoLoop(
-                    numVerts: numVerts,
-                    verts: ptr.baseAddress
-                ),
-                numHoles: 0,
-                holes: nil
-            )
+    internal func withGeoPolygon<T>(_ body: (inout GeoPolygon) -> T) -> T {
+        return loop.withUnsafeMutableBufferPointer { loopPtr in
+            var holeLoops: [GeoLoop] = []
+            holeLoops.reserveCapacity(holes.count)
+            for var hole in holes {
+                let loop = hole.withUnsafeMutableBufferPointer { ptr in
+                    GeoLoop(numVerts: Int32(ptr.count), verts: ptr.baseAddress)
+                }
+                holeLoops.append(loop)
+            }
+
+            var holeLoopsCopy = holeLoops
+            return holeLoopsCopy.withUnsafeMutableBufferPointer { holesPtr in
+                var polygon = GeoPolygon(
+                    geoloop: GeoLoop(
+                        numVerts: Int32(loopPtr.count),
+                        verts: loopPtr.baseAddress
+                    ),
+                    numHoles: Int32(holeLoops.count),
+                    holes: holesPtr.baseAddress
+                )
+                return body(&polygon)
+            }
         }
     }
 
-    public init(loop: [H3Coordinate]) {
+    public init(loop: [H3Coordinate], holes: [[H3Coordinate]] = []) {
         self.loop = loop.map(\.latLng)
+        self.holes = holes.map { $0.map(\.latLng) }
     }
 }
 
@@ -240,21 +253,23 @@ extension Array where Element == H3Coordinate {
 extension H3Index {
 
     public static func polygonToCells(polygon: H3Polygon, resolution: Int) -> [H3Index] {
-        var geoPolygon = polygon.geoPolygon
+        return polygon.withGeoPolygon { geoPolygon in
+            var polygon = geoPolygon
 
-        var maxCellsSize: Int64 = 0
-        let sizeError = maxPolygonToCellsSize(&geoPolygon, Int32(resolution), 0, &maxCellsSize)
-        if sizeError.code != .success {
-            return []
+            var maxCellsSize: Int64 = 0
+            let sizeError = maxPolygonToCellsSize(&polygon, Int32(resolution), 0, &maxCellsSize)
+            if sizeError.code != .success {
+                return []
+            }
+
+            var cells = [UInt64](repeating: 0, count: Int(maxCellsSize))
+            let error = Ch3.polygonToCells(&polygon, Int32(resolution), 0, &cells)
+            if error.code != .success {
+                return []
+            }
+
+            return cells.map(H3Index.init).filter(\.isValid)
         }
-
-        var cells = [UInt64](repeating: 0, count: Int(maxCellsSize))
-        let error = Ch3.polygonToCells(&geoPolygon, Int32(resolution), 0, &cells)
-        if error.code != .success {
-            return []
-        }
-
-        return cells.map(H3Index.init).filter(\.isValid)
     }
 }
 
